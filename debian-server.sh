@@ -32,7 +32,14 @@ if [[ $? -ne 0 ]]; then
 fi
 
 # Enable forwarding
-echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+tee -a  /etc/sysctl.conf > /dev/null <<EOF 
+"net.ipv4.ip_forward = 1"
+EOF
+if [[ $? -ne 0 ]]; then
+    echo "Failed to enable forwarding"
+    exit 1
+fi
+
 sysctl -p
 if [[ $? -ne 0 ]]; then
     echo "Failed to enable forwarding"
