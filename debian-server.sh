@@ -14,22 +14,18 @@ if [[ $? -ne 0 ]]; then
 fi
 
 # Create config
-cat <<EOF > /etc/wireguard/wg0.conf
+sudo tee /etc/wireguard/wg0.conf > /dev/null <<EOF
 [Interface]
 PrivateKey = $(cat privatekey)
-Address = 10.24.0.1/24
+Address = 10.0.0.1/24
 ListenPort = 51820
-PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE; iptables -A INPUT -p udp --dport 51820 -j ACCEPT
+PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE; iptables -D INPUT -p udp --dport 51820 -j ACCEPT
 
 [Peer]
 PublicKey = $(cat publickey)
-AllowedIPs = 10.24.0.1
+AllowedIPs = 10.0.0.2/32
 EOF
-
-# Enable and start
-systemctl enable wg-quick@wg0
-systemctl start wg-quick@wg0
 if [[ $? -ne 0 ]]; then
     echo "Failed to start WireGuard"
     exit 1
