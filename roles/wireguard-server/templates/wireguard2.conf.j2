@@ -1,0 +1,20 @@
+[Interface]
+Address = 10.5.0.1
+ListenPort = 51820
+# Use your own private key, from /etc/wireguard/privatekey
+PrivateKey = {{ private_key }}
+
+PostUp = ufw route allow in on wg0 out on eth0
+PostUp = iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE
+PostUp = ip6tables -t nat -I POSTROUTING -o eth0 -j MASQUERADE
+PreDown = ufw route delete allow in on wg0 out on eth0
+PreDown = iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+PreDown = ip6tables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+
+{% for peer in peers %}
+{% if peer.key != '' -%}
+[Peer]
+PublicKey = {{ peer.key }}
+AllowedIPs = {{ peer.ip }}/24
+{% endif %}
+{% endfor %}

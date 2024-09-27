@@ -1,0 +1,5 @@
+---
+- name: up wireguard
+  become: true
+  command: wg-quick up /etc/wireguard/wg0.conf
+

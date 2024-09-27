@@ -1,0 +1,18 @@
+---
+- set_fact:
+    peers: >-
+      {{  
+        peers  | default([])  + 
+        [{
+          'key': hostvars[item]['public_key'], 
+          'ip': hostvars[item]['vpn_ip'] 
+        }] 
+      }}
+  when: hostvars[item]['public_key'] is defined
+  loop: "{{ groups['home'] }}"
+- debug: 
+    var: peers
+- name: creating wireguard config
+  template:
+    src: wireguard2.conf.j2
+    dest: /etc/wireguard/wg0.conf

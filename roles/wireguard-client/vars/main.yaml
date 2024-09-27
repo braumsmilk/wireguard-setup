@@ -1,0 +1,3 @@
+server_public_ip: "{{ groups['ec2'][0].ansible_host }}"
+client_private_key: "{{ private_key }}"
+client_ip: "{{ hostvars[inventory_hostname]['vpn_ip']}}"

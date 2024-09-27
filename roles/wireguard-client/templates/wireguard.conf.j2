@@ -1,0 +1,15 @@
+[Interface]
+Address = {{ client_ip }}
+PrivateKey = {{ client_private_key }}
+
+# define the remote WireGuard interface (server)
+[Peer]
+
+# contents of wg-public.key on the WireGuard server
+PublicKey = {{ server_public_key }}
+
+# the IP address of the server on the WireGuard network
+AllowedIPs = 10.5.0.1/32
+
+# public IP address and port of the WireGuard server
+Endpoint = {{ server_public_ip }}:51820

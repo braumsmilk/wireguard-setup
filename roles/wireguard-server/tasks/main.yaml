@@ -1,0 +1,4 @@
+---
+- include_tasks: ../tasks/wireguard_stop.yaml
+- include_tasks: wireguard_configure.yaml
+- include_tasks: ../tasks/wireguard_start.yaml

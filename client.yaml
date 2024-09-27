@@ -1,0 +1,17 @@
+- hosts: ec2
+  remote_user: ubuntu
+  become: yes
+  tasks:
+  - name: capture server public key
+    command: wg show wg0 public-key
+    register: server_public_key
+  - set_fact:
+      server_public_key: "{{ server_public_key.stdout }}"
+- hosts: home
+  remote_user: sam
+  become: yes
+  roles:
+  - common
+  - wireguard-client
+
+  

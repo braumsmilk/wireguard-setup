@@ -33,7 +33,7 @@ fi
 
 # Enable forwarding
 sudo tee -a  /etc/sysctl.conf > /dev/null <<EOF 
-"net.ipv4.ip_forward = 1"
+net.ipv4.ip_forward = 1
 EOF
 if [[ $? -ne 0 ]]; then
     echo "Failed to enable forwarding"

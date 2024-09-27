@@ -1,0 +1,12 @@
+---
+- name: enable ip forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: 1
+    state: present
+    sysctl_set: yes
+- name: ufw allow wireguard
+  ufw:
+    rule: allow
+    port: 51820
+    proto: udp

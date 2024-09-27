@@ -1,0 +1,5 @@
+---
+- name: stop wireguard
+  command: wg-quick down wg0
+  become: true
+  ignore_errors: true

@@ -1,0 +1,13 @@
+---
+- set_fact:
+    server_public_key: "{{ hostvars['vpn']['server_public_key'] }}"
+- set_fact:
+    server_public_ip: "{{ hostvars['vpn']['ansible_host'] }}"
+- include_tasks: ../tasks/wireguard_stop.yaml
+- name: configure wireguard
+  template:
+    src: wireguard.conf.j2
+    dest: /etc/wireguard/wg0.conf
+- include_tasks: ../tasks/wireguard_start.yaml
+
+

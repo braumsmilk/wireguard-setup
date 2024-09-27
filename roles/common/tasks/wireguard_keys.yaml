@@ -1,0 +1,50 @@
+---
+- name: Check that the private key exists
+  stat:
+    path: /etc/wireguard/privatekey
+  register: privatekey_stat
+
+- name: Check that the public key exists
+  stat:
+    path: /etc/wireguard/publickey
+  register: publickey_stat
+
+- name: generating private key
+  command: wg genkey
+  register: private_key
+  when: privatekey_stat.stat.exists == False
+
+- name: create private key file
+  copy:
+    content: "{{ private_key.stdout}}"
+    dest: /etc/wireguard/privatekey
+  when: privatekey_stat.stat.exists == False
+
+- name: capture private key
+  command: "cat /etc/wireguard/privatekey"
+  register: private_key_file
+
+- name: generating public key
+  command: "echo {{ private_key }} | wg pubkey"
+  register: public_key
+  when: publickey_stat.stat.exists == False
+
+- name: create public key file
+  copy:
+    content: "{{ public_key }}"
+    dest: /etc/wireguard/publickey
+  when: publickey_stat.stat.exists == False
+
+- name: capture public key
+  command: "cat /etc/wireguard/publickey"
+  register: public_key_file
+
+- set_fact:
+    public_key: "{{ public_key_file.stdout }}"
+    private_key: "{{ private_key_file.stdout }}"
+
+- debug:
+    var: public_key
+- debug:
+    var: private_key
+
