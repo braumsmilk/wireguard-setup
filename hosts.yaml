@@ -22,4 +22,10 @@ home:
       ansible_user: ubuntu
       ansible_ssh_private_key_file: ~/vpn.pem
       vpn_ip: 10.5.0.5
+nfs:
+  hosts:
+    nfs:
+      ansible_host: steven
+      ansible_user: sam
+      nfs_dir: /mnt/nfs
     

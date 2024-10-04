@@ -1,0 +1,5 @@
+- hosts: nfs
+  remote_user: sam
+  become: yes
+  roles:
+  - nfs
